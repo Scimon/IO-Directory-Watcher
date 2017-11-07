@@ -1,12 +1,14 @@
 use v6.c;
 unit class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com">;
 
-subset ValidDirectory of Str where *.path.d;
+subset ValidDirectory of IO::Path where *.d;
 
 has ValidDirectory $.dir;
 
-submethod TWEAK( :$dir ) {
+submethod BUILD( :$dir ) {
     fail "Directory required to watch" unless $dir;
+    my $dir-path =  $dir ~~ Str ?? $dir.path !! $dir;
+    $!dir := $dir-path;
 }
 
 =begin pod
