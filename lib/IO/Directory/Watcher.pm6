@@ -4,12 +4,24 @@ unit class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@g
 subset ValidDirectory of IO::Path where *.d;
 
 has ValidDirectory $.dir;
+has Supply $.supply;
+has Supplier $!supplier;
+has Supply $!monitor;
+
+method !handle-event( $event ) {
+    $!supplier.emit( $event );
+}
 
 submethod BUILD( :$dir ) {
     fail "Directory required to watch" unless $dir;
     my $dir-path =  $dir ~~ Str ?? $dir.path !! $dir;
     $!dir := $dir-path;
+    $!supplier = Supplier.new;
+    $!supply = $!supplier.Supply;
+    $!monitor = IO::Notification.watch-path( $!dir );
+    $!monitor.tap( -> $e { self!handle-event( $e ) } );
 }
+
 
 =begin pod
 

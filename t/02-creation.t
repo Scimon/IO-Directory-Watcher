@@ -8,4 +8,20 @@ dies-ok { IO::Directory::Watcher.new( :dir("./02-creation.t") ) }, "Needs to be 
 lives-ok { IO::Directory::Watcher.new( :dir(".") ) }, "Minimal creation works";
 lives-ok { IO::Directory::Watcher.new( :dir(".".path) ) }, "Paths are fine";
 
+my $watcher = IO::Directory::Watcher.new( :dir(".") );
+ok $watcher.supply ~~ Supply, "The watcher has a supply";
+
+my @events;
+
+$watcher.supply.tap( -> $event { @events.push( $event ) } );
+
+my $test-file-path = "./test-file".path;
+$test-file-path.open(:w).say("Test");
+$test-file-path.unlink;
+# Small sleep to let the events catch up
+sleep 0.05;
+
+ok ! $test-file-path.e, "File deleted OK";
+ok @events > 0, "We have some events";
+
 done-testing;
