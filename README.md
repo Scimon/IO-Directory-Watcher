@@ -3,7 +3,7 @@
 NAME
 ====
 
-IO::Directory::Watcher - blah blah blah
+IO::Directory::Watcher - File change events for long running systems.
 
 SYNOPSIS
 ========
@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-IO::Directory::Watcher is ...
+IO::Directory::Watcher is a wrapper around the IO::Nofitication system designed to provide some addtional details for a long running process on changes made in a directory.
 
 AUTHOR
 ======

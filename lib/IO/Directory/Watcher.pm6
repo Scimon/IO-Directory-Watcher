@@ -1,12 +1,12 @@
 use v6.c;
-unit class IO::Directory::Watcher:ver<0.0.1>;
+unit class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com">;
 
 
 =begin pod
 
 =head1 NAME
 
-IO::Directory::Watcher - blah blah blah
+IO::Directory::Watcher - File change events for long running systems.
 
 =head1 SYNOPSIS
 
@@ -14,7 +14,7 @@ IO::Directory::Watcher - blah blah blah
 
 =head1 DESCRIPTION
 
-IO::Directory::Watcher is ...
+IO::Directory::Watcher is a wrapper around the IO::Nofitication system designed to provide some addtional details for a long running process on changes made in a directory.
 
 =head1 AUTHOR
 

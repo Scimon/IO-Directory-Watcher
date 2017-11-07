@@ -4,7 +4,7 @@
   ],
   "build-depends" : [ ],
   "depends" : [ ],
-  "description" : "blah blah blah",
+  "description" : "File change events for long running systems.",
   "license" : "Artistic-2.0",
   "name" : "IO::Directory::Watcher",
   "perl" : "6.c",
