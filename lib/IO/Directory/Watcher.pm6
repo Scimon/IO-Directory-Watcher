@@ -1,7 +1,9 @@
 use v6.c;
 unit class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com">;
 
-has $.dir;
+subset ValidDirectory of Str where *.path.d;
+
+has ValidDirectory $.dir;
 
 submethod TWEAK( :$dir ) {
     fail "Directory required to watch" unless $dir;
