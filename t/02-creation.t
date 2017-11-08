@@ -19,7 +19,7 @@ my $test-file-path = "./test-file".path;
 $test-file-path.open(:w).say("Test");
 $test-file-path.unlink;
 # Small sleep to let the events catch up
-sleep 0.05;
+sleep 0.25;
 
 ok ! $test-file-path.e, "File deleted OK";
 ok @events > 0, "We have some events";
