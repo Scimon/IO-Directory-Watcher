@@ -1,25 +1,50 @@
 use v6.c;
-unit class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com">;
-
-subset ValidDirectory of IO::Path where *.d;
-
-has ValidDirectory $.dir;
-has Supply $.supply;
-has Supplier $!supplier;
-has Supply $!monitor;
-
-method !handle-event( $event ) {
-    $!supplier.emit( $event );
+class IO::Directory::Watcher::Manifest {
+    has IO::Path $.path;
 }
 
-submethod BUILD( :$dir ) {
-    fail "Directory required to watch" unless $dir;
-    my $dir-path =  $dir ~~ Str ?? $dir.path !! $dir;
-    $!dir := $dir-path;
-    $!supplier = Supplier.new;
-    $!supply = $!supplier.Supply;
-    $!monitor = IO::Notification.watch-path( $!dir );
-    $!monitor.tap( -> $e { self!handle-event( $e ) } );
+class IO::Directory::Watcher::Event {
+    enum EventType <FileCreated>;
+
+    has EventType $.type;
+}
+
+class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com"> {
+
+    
+    subset ValidDirectory of IO::Path where *.d;
+    
+    has ValidDirectory $.dir;
+    has Supply $.supply;
+    has Supplier $!supplier;
+    has Supply $!monitor;
+    has IO::Directory::Watcher::Manifest %!manifest{Str};
+    
+    method !handle-event( $event ) {
+        if ( ! %!manifest{$event.path} ) {
+            $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileCreated ) );
+            %!manifest{$event.path} = IO::Directory::Watcher::Manifest.new( path => $event.path.IO );
+        }        
+    }
+    
+    submethod BUILD( :$dir ) {
+        fail "Directory required to watch" unless $dir;
+        my $dir-path =  $dir ~~ Str ?? $dir.path !! $dir;
+        $!dir := $dir-path;
+        $!supplier = Supplier.new;
+        $!supply = $!supplier.Supply;
+        %!manifest = self!init_manifest( $!dir );
+        $!monitor = IO::Notification.watch-path( $!dir );
+        $!monitor.tap( -> $e { self!handle-event( $e ) } );
+    }
+
+    method !init_manifest( $dir ) {
+        my IO::Directory::Watcher::Manifest %manifest{Str};
+        for dir( $dir ) -> $path {
+            %manifest{$path.Str} = IO::Directory::Watcher::Manifest.new( path => $path );
+        }
+        return %manifest;
+    }
 }
 
 
