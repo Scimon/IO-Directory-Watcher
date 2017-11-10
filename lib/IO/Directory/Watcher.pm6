@@ -7,6 +7,7 @@ class IO::Directory::Watcher::Event {
     enum EventType <FileCreated>;
 
     has EventType $.type;
+    has IO::Path $.path;
 }
 
 class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com"> {
@@ -22,7 +23,7 @@ class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.
     
     method !handle-event( $event ) {
         if ( ! %!manifest{$event.path} ) {
-            $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileCreated ) );
+            $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileCreated, path => $event.path.IO ) );
             %!manifest{$event.path} = IO::Directory::Watcher::Manifest.new( path => $event.path.IO );
         }        
     }

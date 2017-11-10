@@ -12,11 +12,14 @@ my $watcher = IO::Directory::Watcher.new( :dir($dir) );
 $watcher.supply.tap( -> $event { @events.push( $event ) } );
 
 my $test-file-path = "$dir/test-file".path;
-$test-file-path.open(:w).say("Test");
+$test-file-path.open(:w);
 # Small sleep to let the events catch up
 sleep 0.25;
 
 ok @events == 1, "We have 1 event";
-ok @events[0].type == IO::Directory::Watcher::Event::FileCreated, "It's a file creation event";
+my $event = @events[0];
+
+is $event.type, IO::Directory::Watcher::Event::FileCreated, "It's a file creation event";
+is $event.path, "$dir/test-file".path, "For the file we created";
 
 done-testing;
