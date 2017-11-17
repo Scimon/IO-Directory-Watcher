@@ -48,6 +48,11 @@ class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.
         }
         return %manifest;
     }
+
+    method done() {
+        $!monitor = Nil;
+        $!supplier.done();
+    }
 }
 
 

@@ -4,18 +4,22 @@ use IO::Directory::Watcher;
 use File::Temp;
 
 my $dir = tempdir();
-my @events;
 
 ok $dir.path.d, "We have a temp directory";
 
 my $watcher = IO::Directory::Watcher.new( :dir($dir) );
-$watcher.supply.tap( -> $event { @events.push( $event ) } );
+
+my $event-channel = $watcher.supply.Channel();
+
 
 my $test-file-path = "$dir/test-file".path;
 $test-file-path.open(:w);
 # Small sleep to let the events catch up
 sleep 0.25;
 
+$watcher.done;
+
+my @events = $event-channel.eager;
 ok @events == 1, "We have 1 event";
 my $event = @events[0];
 
