@@ -4,7 +4,7 @@ class IO::Directory::Watcher::Manifest {
 }
 
 class IO::Directory::Watcher::Event {
-    enum EventType <FileCreated>;
+    enum EventType <FileCreated FileModified>;
 
     has EventType $.type;
     has IO::Path $.path;
@@ -25,7 +25,9 @@ class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.
         if ( ! %!manifest{$event.path} ) {
             $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileCreated, path => $event.path.IO ) );
             %!manifest{$event.path} = IO::Directory::Watcher::Manifest.new( path => $event.path.IO );
-        }        
+        } else {
+            $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileModified, path => $event.path.IO ) );
+        }
     }
     
     submethod BUILD( :$dir ) {
