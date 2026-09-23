@@ -25,6 +25,6 @@ ok @events == 1, "We have 1 event";
 my $event = @events[0];
 
 is $event.type, IO::Directory::Watcher::Event::FileDeleted, "It's a file deletion event";
-is $event.path, "$dir/test-file".IO, "For the file we deleted";
+is $event.path, ($dir,'test-file').join($*SPEC.dir-sep).IO, "For the file we deleted";
 
 done-testing;

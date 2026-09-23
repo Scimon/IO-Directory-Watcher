@@ -31,6 +31,15 @@ class IO::Directory::Watcher:ver<0.0.1>:auth<zef:Scimon> {
                 $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileDeleted, path => $event.path.IO ) );
                 return;
             } else {
+                if ( $event.path.IO.d ) {
+                    for ( %!manifest.keys ) -> $path {
+                        if ( ! $path.IO.e ) {
+                            %!manifest{$path} = Nil;
+                            $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileDeleted, path => $path.IO ) );
+                            return;
+                        }
+                    }
+                }
                 $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileModified, path => $event.path.IO ) );
             }
         }
@@ -95,13 +104,16 @@ event and the path of the file or directory that was created, modified or delete
 Currently the Watcher only supports a single directory and does not support 
 recursive watching of sub-directories.
 
+This has been tested on Linux and Windows. MacOS support is currently a work
+in progress due to the handling of file change notifications on that platform.
+
 =head1 AUTHOR
 
 Simon Proctor <simon.proctor@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2017 Simon Proctor
+Copyright 2026 Simon Proctor
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
