@@ -31,6 +31,15 @@ class IO::Directory::Watcher:ver<0.0.1>:auth<zef:Scimon> {
                 $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileDeleted, path => $event.path.IO ) );
                 return;
             } else {
+                if ( $event.path.IO.d ) {
+                    for ( %!manifest.keys ) -> $path {
+                        if ( ! $path.IO.e ) {
+                            %!manifest{$path} = Nil;
+                            $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileDeleted, path => $path.IO ) );
+                            return;
+                        }
+                    }
+                }
                 $!supplier.emit( IO::Directory::Watcher::Event.new( type => IO::Directory::Watcher::Event::FileModified, path => $event.path.IO ) );
             }
         }
