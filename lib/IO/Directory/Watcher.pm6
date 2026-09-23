@@ -10,7 +10,7 @@ class IO::Directory::Watcher::Event {
     has IO::Path $.path;
 }
 
-class IO::Directory::Watcher:ver<0.0.1>:auth<Simon Proctor "simon.proctor@gmail.com"> {
+class IO::Directory::Watcher:ver<0.0.1>:auth<zef:Scimon> {
 
     
     subset ValidDirectory of IO::Path where *.d;

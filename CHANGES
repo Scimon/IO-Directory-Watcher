@@ -1,5 +1,0 @@
-Revision history for IO::Directory::Watcher
-
-{{$NEXT}}
-    - Initial version.
-    - Covers file creation, modification and deletion
