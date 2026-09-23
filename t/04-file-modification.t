@@ -1,12 +1,12 @@
-use v6.c;
+use v6.d;
 use Test;
 use IO::Directory::Watcher;
 use File::Temp;
 
 my $dir = tempdir();
 
-ok $dir.path.d, "We have a temp directory";
-my $test-file-path = "$dir/test-file".path;
+ok $dir.IO.d, "We have a temp directory";
+my $test-file-path = "$dir/test-file".IO;
 my $fh = $test-file-path.open(:w);
 $fh.say("Here's a line");
 
@@ -25,6 +25,6 @@ ok @events == 1, "We have 1 event";
 my $event = @events[0];
 
 is $event.type, IO::Directory::Watcher::Event::FileModified, "It's a file modification event";
-is $event.path, "$dir/test-file".path, "For the file we modified";
+is $event.path, "$dir/test-file".IO, "For the file we modified";
 
 done-testing;

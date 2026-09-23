@@ -1,4 +1,4 @@
-use v6.c;
+use v6.d;
 use Test;
 use IO::Directory::Watcher;
 use File::Temp;
@@ -8,17 +8,17 @@ dies-ok { IO::Directory::Watcher.new() }, "Needs to be given at least one valid 
 dies-ok { IO::Directory::Watcher.new( :dir(Set(1,2,3)) ) }, "String or IO::Path only please";
 dies-ok { IO::Directory::Watcher.new( :dir("./02-creation.t") ) }, "Needs to be a directory";
 lives-ok { IO::Directory::Watcher.new( :dir(".") ) }, "Minimal creation works";
-lives-ok { IO::Directory::Watcher.new( :dir(".".path) ) }, "Paths are fine";
+lives-ok { IO::Directory::Watcher.new( :dir(".".IO) ) }, "Paths are fine";
 
 my $dir = tempdir();
-ok $dir.path.d, "We have a temp directory";
+ok $dir.IO.d, "We have a temp directory";
 
-my $watcher = IO::Directory::Watcher.new( :dir($dir.path) );
+my $watcher = IO::Directory::Watcher.new( :dir($dir.IO) );
 ok $watcher.supply ~~ Supply, "The watcher has a supply";
 
 my $event-channel = $watcher.supply.Channel();
 
-my $test-file-path = "$dir/test-file".path;
+my $test-file-path = "$dir/test-file".IO;
 ok ! $test-file-path.e, "No File";
 my $fh = $test-file-path.open(:w);
 ok $test-file-path.e, "File Created";
