@@ -104,13 +104,16 @@ event and the path of the file or directory that was created, modified or delete
 Currently the Watcher only supports a single directory and does not support 
 recursive watching of sub-directories.
 
+This has been tested on Linux and Windows. MacOS support is currently a work
+in progress due to the handling of file change notifications on that platform.
+
 =head1 AUTHOR
 
 Simon Proctor <simon.proctor@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2017 Simon Proctor
+Copyright 2026 Simon Proctor
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

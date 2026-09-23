@@ -29,6 +29,8 @@ Events are emitted as IO::Directory::Watcher::Event objects which contain the ty
 
 Currently the Watcher only supports a single directory and does not support recursive watching of sub-directories.
 
+This has been tested on Linux and Windows. MacOS support is currently a work in progress due to the handling of file change notifications on that platform.
+
 AUTHOR
 ======
 
@@ -37,7 +39,7 @@ Simon Proctor <simon.proctor@gmail.com>
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2017 Simon Proctor
+Copyright 2026 Simon Proctor
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
