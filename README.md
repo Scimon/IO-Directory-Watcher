@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/Scimon/IO-Directory-Watcher/workflows/test/badge.svg)](https://github.com/Scimon/IO-Directory-Watcher/actions)
+
 NAME
 ====
 
